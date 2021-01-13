@@ -27,7 +27,6 @@ model roadTrip {
   creationDate DateTime @default(now())
   user         user     @relation(fields: [userId], references: [id])
   userId       Int
-  media        media[]
   pin          pin[]
 }
 
@@ -40,6 +39,7 @@ model pin {
   creationDate DateTime @default(now())
   roadTrip     roadTrip @relation(fields: [roadTripId], references: [id])
   roadTripId   Int
+  media        media[]
 
 
 }
@@ -49,6 +49,6 @@ model media {
   url          String
   isPicture    Boolean
   creationDate DateTime @default(now())
-  pin          roadTrip @relation(fields: [pinId], references: [id])
+  pin          pin @relation(fields: [pinId], references: [id])
   pinId        Int
 }
