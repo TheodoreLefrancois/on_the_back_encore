@@ -5,7 +5,7 @@ const prisma = require('../prismaClient');
 
 const router = express.Router();
 
-router.get('/roadTrip', async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
     const results = await prisma.roadTrip.findMany();
     res.status(200).json(results);
@@ -14,7 +14,21 @@ router.get('/roadTrip', async (req, res, next) => {
   }
 });
 
-router.post('/roadTrip', joiValidation(valRoadTrip), async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const results = await prisma.roadTrip.findUnique({
+      where: {
+        id: parseInt(id, 10),
+      },
+    });
+    res.status(200).json(results);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post('/', joiValidation(valRoadTrip), async (req, res, next) => {
   try {
     const results = await prisma.roadTrip.create({
       data: {
@@ -30,25 +44,21 @@ router.post('/roadTrip', joiValidation(valRoadTrip), async (req, res, next) => {
   }
 });
 
-router.put(
-  '/roadTrip/:id',
-  joiValidation(valRoadTrip),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const { label, description, creationDate, userId } = req.body;
-      const results = await prisma.roadTrip.update({
-        where: {
-          id: parseInt(id, 10),
-        },
-        data: { label, description, creationDate, userId },
-      });
-      res.status(200).json(results);
-    } catch (err) {
-      next(err);
-    }
+router.put('/:id', joiValidation(valRoadTrip), async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { label, description, creationDate, userId } = req.body;
+    const results = await prisma.roadTrip.update({
+      where: {
+        id: parseInt(id, 10),
+      },
+      data: { label, description, creationDate, userId },
+    });
+    res.status(200).json(results);
+  } catch (err) {
+    next(err);
   }
-);
+});
 router.delete('/roadTrip/:id', async (req, res, next) => {
   try {
     const { id } = req.params;

@@ -6,16 +6,6 @@ const { decodePassword } = require('../util');
 
 const router = express.Router();
 
-/**
- * POST /api/v1/auth
- * @summary This route post admin
- * @tags auth
- * @param {auth} request.body.required - Enter admin data (example: "firstname": "Jean", "lastname": "Valjean", password : "tree6clopepass", email: "contact@email.com", "phone": "05.00.00.00.00")
- * @return {object} 201 - Succesfully sent admin
- * @return {object} 404 - Not found
- * @return {object} 500 - Internal Server Error
- */
-
 router.post('/', async (req, res, next) => {
   const { email, password } = req.body;
 

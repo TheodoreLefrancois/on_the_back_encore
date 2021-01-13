@@ -2,10 +2,11 @@ const express = require('express');
 const { valUser } = require('../joiSchema');
 const { joiValidation } = require('../middlewares');
 const prisma = require('../prismaClient');
+const { hashPassword } = require('../util');
 
 const router = express.Router();
 
-router.get('/user', async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
     const results = await prisma.user.findMany();
     res.status(200).json(results);
@@ -14,7 +15,7 @@ router.get('/user', async (req, res, next) => {
   }
 });
 
-router.get('/user/:id', async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const results = await prisma.user.findUnique({
@@ -28,14 +29,14 @@ router.get('/user/:id', async (req, res, next) => {
   }
 });
 
-router.post('/user', joiValidation(valUser), async (req, res, next) => {
+router.post('/', joiValidation(valUser), async (req, res, next) => {
   try {
     const results = await prisma.user.create({
       data: {
         firstName: req.body.firstName,
-        lastName: req.body.lasrtName,
+        lastName: req.body.lastName,
         email: req.body.email,
-        password: req.body.password,
+        password: hashPassword(req.body.password),
         avatarUrl: req.body.avatarUrl,
       },
     });
@@ -45,7 +46,7 @@ router.post('/user', joiValidation(valUser), async (req, res, next) => {
   }
 });
 
-router.put('/user/:id', joiValidation(valUser), async (req, res, next) => {
+router.put('/:id', joiValidation(valUser), async (req, res, next) => {
   try {
     const { id } = req.params;
     const { firstName, lastName, email, password, avatarUrl } = req.body;
@@ -57,7 +58,7 @@ router.put('/user/:id', joiValidation(valUser), async (req, res, next) => {
         firstName,
         lastName,
         email,
-        password,
+        password: hashPassword(password),
         avatarUrl,
       },
     });
@@ -67,7 +68,7 @@ router.put('/user/:id', joiValidation(valUser), async (req, res, next) => {
   }
 });
 
-router.delete('/user/:id', async (req, res, next) => {
+router.delete('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     await prisma.user.delete({
