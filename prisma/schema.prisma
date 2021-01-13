@@ -27,15 +27,16 @@ model roadTrip {
   creationDate DateTime @default(now())
   user         user     @relation(fields: [userId], references: [id])
   userId       Int
-  pin          pin[]
   media        media[]
-  texte        texte[]
+  pin          pin[]
 }
 
 model pin {
   id           Int      @id @default(autoincrement())
-  long         Int
-  lat          Int
+  long         Float
+  lat          Float
+  title        String
+  description  String?
   creationDate DateTime @default(now())
   roadTrip     roadTrip @relation(fields: [roadTripId], references: [id])
   roadTripId   Int
@@ -47,16 +48,6 @@ model media {
   id           Int      @id @default(autoincrement())
   url          String
   isPicture    Boolean
-  creationDate DateTime @default(now())
-  pin          roadTrip @relation(fields: [pinId], references: [id])
-  pinId        Int
-
-}
-
-model texte {
-  id           Int      @id @default(autoincrement())
-  title        String
-  description  String?
   creationDate DateTime @default(now())
   pin          roadTrip @relation(fields: [pinId], references: [id])
   pinId        Int
