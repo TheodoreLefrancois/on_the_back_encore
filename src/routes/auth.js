@@ -11,20 +11,20 @@ router.post('/', async (req, res, next) => {
 
   try {
     // check if this admin exists in database
-    const admin = await prisma.admin.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
         email,
       },
     });
 
     // if not, throw a 401
-    if (!admin) {
+    if (!user) {
       res.status(401);
       throw new Error('User does not exists');
     }
 
     // if yes, continue by comparing both password
-    const isValid = decodePassword(password, admin.password);
+    const isValid = decodePassword(password, user.password);
 
     // if the password is not valid, throw a 401
     if (!isValid) {
@@ -35,7 +35,7 @@ router.post('/', async (req, res, next) => {
     // if it is valid, then continue by signing a new token
     const token = jwt.sign(
       {
-        email: admin.email,
+        email: user.email,
         role: 'USER',
       },
       process.env.SECRET,
