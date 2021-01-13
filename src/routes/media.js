@@ -3,16 +3,16 @@ const prisma = require('../prismaClient');
 
 const router = express.Router();
 
-router.get('/media', async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
-    const results = await prisma.media.findMany();
+    const results = await prisma.findMany();
     res.status(200).json(results);
   } catch (err) {
     next(err);
   }
 });
 
-router.get('/media/:id', async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const results = await prisma.media.findUnique({
@@ -26,7 +26,7 @@ router.get('/media/:id', async (req, res, next) => {
   }
 });
 
-router.post('/media', async (req, res, next) => {
+router.post('/', async (req, res, next) => {
   try {
     const results = await prisma.media.create({
       data: {
@@ -41,7 +41,7 @@ router.post('/media', async (req, res, next) => {
   }
 });
 
-router.put('/media/:id', async (req, res, next) => {
+router.put('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const { url, isPicture, pinId } = req.body;
@@ -61,7 +61,7 @@ router.put('/media/:id', async (req, res, next) => {
   }
 });
 
-router.delete('/media/:id', async (req, res, next) => {
+router.delete('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     await prisma.user.delete({

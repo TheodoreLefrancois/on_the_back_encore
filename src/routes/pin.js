@@ -3,7 +3,7 @@ const prisma = require('../prismaClient');
 
 const router = express.Router();
 
-router.get('/pin', async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
     const results = await prisma.pin.findMany();
     res.status(200).json(results);
@@ -12,7 +12,7 @@ router.get('/pin', async (req, res, next) => {
   }
 });
 
-router.get('/pin/:id', async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const results = await prisma.pin.findUnique({
@@ -26,7 +26,7 @@ router.get('/pin/:id', async (req, res, next) => {
   }
 });
 
-router.post('/pin', async (req, res, next) => {
+router.post('/', async (req, res, next) => {
   try {
     const results = await prisma.pin.create({
       data: {
@@ -43,7 +43,7 @@ router.post('/pin', async (req, res, next) => {
   }
 });
 
-router.put('/pin/:id', async (req, res, next) => {
+router.put('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const { long, lat, title, description, roadTripId } = req.body;
@@ -59,7 +59,7 @@ router.put('/pin/:id', async (req, res, next) => {
   }
 });
 
-router.delete('/pin/:id', async (req, res, next) => {
+router.delete('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     await prisma.pin.delete({
