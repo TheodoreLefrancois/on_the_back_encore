@@ -45,7 +45,7 @@ router.put('/media/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const { url, isPicture, pinId } = req.body;
-    const results = await prisma.user,update ({
+    const results = await prisma.user.update({
       where: {
         id: parseInt(id, 10),
       },
@@ -59,18 +59,18 @@ router.put('/media/:id', async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-})
+});
 
 router.delete('/media/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     await prisma.user.delete({
       where: {
-        id: parseInt(id,10),
+        id: parseInt(id, 10),
       },
     });
     res.sendStatus(204);
-  } catch {
+  } catch (err) {
     next(err);
   }
 });
