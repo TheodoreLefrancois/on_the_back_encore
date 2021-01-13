@@ -1,4 +1,6 @@
 const express = require('express');
+const { valPin } = require('../joiSchema');
+const { joiValidation } = require('../middlewares');
 const prisma = require('../prismaClient');
 
 const router = express.Router();
@@ -26,7 +28,7 @@ router.get('/pin/:id', async (req, res, next) => {
   }
 });
 
-router.post('/pin', async (req, res, next) => {
+router.post('/pin', joiValidation(valPin), async (req, res, next) => {
   try {
     const results = await prisma.pin.create({
       data: {
@@ -43,7 +45,7 @@ router.post('/pin', async (req, res, next) => {
   }
 });
 
-router.put('/pin/:id', async (req, res, next) => {
+router.put('/pin/:id', joiValidation(valPin), async (req, res, next) => {
   try {
     const { id } = req.params;
     const { long, lat, title, description, roadTripId } = req.body;
