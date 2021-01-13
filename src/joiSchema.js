@@ -30,7 +30,7 @@ const valRoadTrip = Joi.object().keys({
   description: Joi.string()
     .regex(/^[\w\s:;.,&`()/\\-]+$/)
     .max(255)
-    .isRequired(),
+    .required(),
   creationDate: Joi.date(),
   userId: Joi.number().integer().required(),
 });
@@ -45,7 +45,7 @@ const valPin = Joi.object().keys({
   description: Joi.string()
     .regex(/^[\w\s:;.,&`()/\\-]+$/)
     .max(255)
-    .isRequired(),
+    .required(),
   creationDate: Joi.date(),
   roadTripId: Joi.number().integer().required(),
 });
@@ -57,6 +57,6 @@ const valMedia = Joi.object().keys({
     .required(),
   isPicture: Joi.boolean().required,
   creationDate: Joi.date(),
-  pinId: Joi.number.integer(),
+  pinId: Joi.number().integer(),
 });
 module.exports = { valUser, valRoadTrip, valPin, valMedia };
