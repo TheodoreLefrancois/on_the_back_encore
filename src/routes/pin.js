@@ -3,23 +3,38 @@ const prisma = require('../prismaClient');
 
 const router = express.Router();
 
-router.get('/roadTrip', async (req, res, next) => {
+router.get('/pin', async (req, res, next) => {
   try {
-    const results = await prisma.roadTrip.findMany();
+    const results = await prisma.pin.findMany();
     res.status(200).json(results);
   } catch (err) {
     next(err);
   }
 });
 
-router.post('/roadTrip', async (req, res, next) => {
+router.get('/pin/:id', async (req, res, next) => {
   try {
-    const results = await prisma.roadTrip.create({
+    const { id } = req.params;
+    const results = await prisma.pin.findUnique({
+      where: {
+        id: parseInt(id, 10),
+      },
+    });
+    res.send(200).json(results);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post('/pin', async (req, res, next) => {
+  try {
+    const results = await prisma.pin.create({
       data: {
-        label: req.body.label,
+        long: req.body.long,
+        lat: req.body.lat,
+        title: req.body.title,
         description: req.body.description,
-        creationDate: req.body.creationDate,
-        userId: req.body.userId,
+        roadTripId: req.body.roadTripId,
       },
     });
     res.status(201).json(results);
@@ -28,25 +43,26 @@ router.post('/roadTrip', async (req, res, next) => {
   }
 });
 
-router.put('/roadTrip/:id', async (req, res, next) => {
+router.put('/pin/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { label, description, creationDate, userId } = req.body;
-    const results = await prisma.roadTrip.update({
+    const { long, lat, title, description, roadTripId } = req.body;
+    const results = await prisma.pin.update({
       where: {
         id: parseInt(id, 10),
       },
-      data: { label, description, creationDate, userId },
+      data: { long, lat, title, description, roadTripId },
     });
     res.status(200).json(results);
   } catch (err) {
     next(err);
   }
 });
-router.delete('/roadTrip/:id', async (req, res, next) => {
+
+router.delete('/pin/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
-    await prisma.roadTrip.delete({
+    await prisma.pin.delete({
       where: {
         id: parseInt(id, 10),
       },

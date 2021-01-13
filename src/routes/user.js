@@ -12,6 +12,20 @@ router.get('/user', async (req, res, next) => {
   }
 });
 
+router.get('/user/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const results = await prisma.user.findUnique({
+      where: {
+        id: parseInt(id, 10),
+      },
+    });
+    res.send(200).json(results);
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.post('/user', async (req, res, next) => {
   try {
     const results = await prisma.user.create({
