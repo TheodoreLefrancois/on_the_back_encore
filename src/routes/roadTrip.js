@@ -3,7 +3,7 @@ const prisma = require('../prismaClient');
 
 const router = express.Router();
 
-router.get('/roadTrip', async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
     const results = await prisma.roadTrip.findMany();
     res.status(200).json(results);
@@ -12,7 +12,21 @@ router.get('/roadTrip', async (req, res, next) => {
   }
 });
 
-router.post('/roadTrip', async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const results = await prisma.roadTrip.findUnique({
+      where: {
+        id: parseInt(id, 10),
+      },
+    });
+    res.status(200).json(results);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post('/', async (req, res, next) => {
   try {
     const results = await prisma.roadTrip.create({
       data: {
@@ -28,7 +42,7 @@ router.post('/roadTrip', async (req, res, next) => {
   }
 });
 
-router.put('/roadTrip/:id', async (req, res, next) => {
+router.put('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const { label, description, creationDate, userId } = req.body;
@@ -43,7 +57,7 @@ router.put('/roadTrip/:id', async (req, res, next) => {
     next(err);
   }
 });
-router.delete('/roadTrip/:id', async (req, res, next) => {
+router.delete('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     await prisma.roadTrip.delete({
