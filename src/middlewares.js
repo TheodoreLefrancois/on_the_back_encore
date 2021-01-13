@@ -20,7 +20,17 @@ function errorHandler(err, req, res, next) {
   res.sendStatus(500);
 }
 
+const joiValidation = (schema) => async (req, res, next) => {
+  try {
+    await schema.validateAsync(req.body, { abortEarly: false });
+    next();
+  } catch (err) {
+    res.status(422);
+    next(err);
+  }
+};
 module.exports = {
   notFound,
   errorHandler,
+  joiValidation,
 };
