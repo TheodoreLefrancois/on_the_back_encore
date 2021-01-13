@@ -17,7 +17,7 @@
   "author": "Théodore Lefrançois, Linda Resseguier, David Mosca, Romain Zucconi",
   "repository": {
     "type": "git",
-    "url": "https://github.com/TheodoreLefrancois/on_the_front_encore.git"
+    "url": "https://github.com/TheodoreLefrancois/on_the_back_encore.git"
   },
   "license": "MIT",
   "dependencies": {
