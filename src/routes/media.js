@@ -1,4 +1,6 @@
 const express = require('express');
+const { valMedia } = require('../joiSchema');
+const { joiValidation } = require('../middlewares');
 const prisma = require('../prismaClient');
 
 const router = express.Router();
@@ -26,7 +28,7 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', joiValidation(valMedia), async (req, res, next) => {
   try {
     const results = await prisma.media.create({
       data: {
@@ -41,7 +43,7 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', joiValidation(valMedia), async (req, res, next) => {
   try {
     const { id } = req.params;
     const { url, isPicture, pinId } = req.body;

@@ -1,4 +1,6 @@
 const express = require('express');
+const { valUser } = require('../joiSchema');
+const { joiValidation } = require('../middlewares');
 const prisma = require('../prismaClient');
 const { hashPassword } = require('../util');
 
@@ -27,7 +29,7 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', joiValidation(valUser), async (req, res, next) => {
   try {
     const results = await prisma.user.create({
       data: {
@@ -44,7 +46,7 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', joiValidation(valUser), async (req, res, next) => {
   try {
     const { id } = req.params;
     const { firstName, lastName, email, password, avatarUrl } = req.body;
