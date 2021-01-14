@@ -31,12 +31,10 @@ router.post('/', async (req, res, next) => {
       res.status(401);
       throw new Error('Invalid password');
     }
-
     // if it is valid, then continue by signing a new token
     const token = jwt.sign(
       {
-        email: user.email,
-        role: 'USER',
+        id: user.id,
       },
       process.env.SECRET,
       {
@@ -47,6 +45,7 @@ router.post('/', async (req, res, next) => {
     // and then respond with the jwt in json
     res.status(200).json({
       token,
+      user,
     });
   } catch (error) {
     next(error);
