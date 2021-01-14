@@ -1,4 +1,5 @@
 const express = require('express');
+const { authentication } = require('../middlewares');
 // const status = require('./status');
 
 const router = express.Router();
@@ -10,9 +11,9 @@ const user = require('./user');
 
 // router.use('/status', status);
 router.use('/auth', auth);
-router.use('/media', media);
-router.use('/pin', pin);
-router.use('/roadTrip', roadTrip);
+router.use('/media', authentication, media);
+router.use('/pin', authentication, pin);
+router.use('/roadTrip', authentication, roadTrip);
 router.use('/user', user);
 
 module.exports = router;
