@@ -14,6 +14,23 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+router.get('/:id/pins', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const results = await prisma.roadTrip.findMany({
+      where: {
+        id: parseInt(id, 10),
+      },
+      select: {
+        pin: true,
+      },
+    });
+    res.status(200).json(results);
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.get('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
