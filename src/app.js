@@ -1,3 +1,5 @@
+// eslint-disable-next-line no-unused-vars
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
@@ -16,6 +18,9 @@ app.use(morgan('dev'));
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
+
+// MULTER (not working yet)
+app.use('/uploads', express.static(`${process.cwd()}/uploads`));
 
 app.use('/api/v1', routes);
 // app.use('/auth', auth);

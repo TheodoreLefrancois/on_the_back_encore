@@ -1,7 +1,14 @@
+/* eslint-disable no-console */
+const fs = require('fs');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const multer = require('multer');
+
 const express = require('express');
 const { valMedia } = require('../joiSchema');
 const { joiValidation } = require('../middlewares');
 const prisma = require('../prismaClient');
+
+const uploads = multer({ dest: 'uploads/' });
 
 const router = express.Router();
 
@@ -40,6 +47,33 @@ router.post('/', joiValidation(valMedia), async (req, res, next) => {
     res.status(201).json(results);
   } catch (err) {
     next(err);
+  }
+});
+
+// MULTER (not working yet)
+router.post('/file', uploads.array('media', 10), async (req, res, next) => {
+  try {
+    console.log(req.files);
+    req.files.forEach((file) => {
+      fs.rename(
+        `${process.cwd()}/uploads/${file.filename}`,
+        `${process.cwd()}/uploads/${file.filename}.mp4`,
+        // eslint-disable-next-line consistent-return
+        async (err) => {
+          if (err) return next(err);
+          await prisma.media.create({
+            data: {
+              url: `/uploads/${file.filename}.mp4`,
+              isPicture: req.body.isPicture,
+            },
+          });
+        }
+      );
+    });
+
+    return res.sendStatus(201);
+  } catch (error) {
+    return next(error);
   }
 });
 
