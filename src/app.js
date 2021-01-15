@@ -2,7 +2,6 @@
 const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
-// const multer = require('multer');
 const helmet = require('helmet');
 const cors = require('cors');
 require('dotenv').config();
@@ -20,7 +19,7 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-// MULTER (not working yet)
+// MULTER
 app.use('/uploads', express.static(`${process.cwd()}/uploads`));
 
 app.use('/api/v1', routes);

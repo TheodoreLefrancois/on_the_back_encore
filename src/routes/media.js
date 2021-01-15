@@ -14,7 +14,7 @@ const router = express.Router();
 
 router.get('/', async (req, res, next) => {
   try {
-    const results = await prisma.findMany();
+    const results = await prisma.media.findMany();
     res.status(200).json(results);
   } catch (err) {
     next(err);
@@ -51,20 +51,26 @@ router.post('/', joiValidation(valMedia), async (req, res, next) => {
 });
 
 // MULTER (not working yet)
-router.post('/file', uploads.array('media', 10), async (req, res, next) => {
+router.post('/:id/file', uploads.array('media', 10), async (req, res, next) => {
+  const { id } = req.params;
   try {
     console.log(req.files);
     req.files.forEach((file) => {
       fs.rename(
         `${process.cwd()}/uploads/${file.filename}`,
-        `${process.cwd()}/uploads/${file.filename}.mp4`,
+        `${process.cwd()}/uploads/${file.filename}.jpg`,
         // eslint-disable-next-line consistent-return
         async (err) => {
           if (err) return next(err);
           await prisma.media.create({
             data: {
-              url: `/uploads/${file.filename}.mp4`,
-              isPicture: req.body.isPicture,
+              url: `/uploads/${file.filename}.jpg`,
+              isPicture: true,
+              pin: {
+                connect: {
+                  id: parseInt(id, 10),
+                },
+              },
             },
           });
         }

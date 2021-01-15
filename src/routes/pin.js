@@ -36,7 +36,11 @@ router.post('/', joiValidation(valPin), async (req, res, next) => {
         lat: req.body.lat,
         title: req.body.title,
         description: req.body.description,
-        roadTripId: req.body.roadTripId,
+        roadTrip: {
+          connect: {
+            id: parseInt(req.body.roadTripId, 10),
+          },
+        },
       },
     });
     res.status(201).json(results);
