@@ -28,6 +28,23 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
+router.get('/:id/medias', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const results = await prisma.pin.findMany({
+      where: {
+        id: parseInt(id, 10),
+      },
+      select: {
+        media: true,
+      },
+    });
+    res.status(200).json(results);
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.post('/', joiValidation(valPin), async (req, res, next) => {
   try {
     const results = await prisma.pin.create({
